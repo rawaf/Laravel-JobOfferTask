@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CompanyController extends Controller
 {
@@ -47,7 +48,13 @@ class CompanyController extends Controller
             'user_id' => auth()->id()
         ]);
         $company->save();
-        return redirect('/companies')->with('message', 'Company has been created successfully');
+
+        Mail::raw('A new Company has been created successfully', function ($message){
+            $message->to(auth()->user()->email)
+                ->subject('New Company');
+        });
+
+        return redirect('/companies')->with('message', 'Company has been created successfully and Email has been sent, Check your inbox.');
     }
 
     /**
