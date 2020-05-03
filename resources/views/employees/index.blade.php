@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="container">
-        @if(session()->has('message'))
-            <div class="alert alert-success">
-                {{ session()->get('message') }}
-            </div>
-        @endif
         <div class="row">
+            @if(session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
             <div class="col-sm-12">
                 <div>
                     <h1 class="display-3">Employees</h1>
@@ -55,7 +55,7 @@
                 <div>
                 </div>
             </div>
+                {{ $employees->links() }}
         </div>
-            {{ $employees->links() }}
     </div>
 @endsection

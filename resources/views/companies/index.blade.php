@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="container">
-        @if(session()->has('message'))
-            <div class="alert alert-success">
-                {{ session()->get('message') }}
-            </div>
-        @endif
         <div class="row">
+            @if(session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
             <div class="col-sm-12">
                 <div>
                     <h1 class="display-3">Companies</h1>
@@ -21,6 +21,8 @@
                         <td>ID</td>
                         <td>Name</td>
                         <td>Email</td>
+                        <td>Website</td>
+                        <td>Logo</td>
                         <td colspan = 2>Actions</td>
                     </tr>
                     </thead>
@@ -31,6 +33,12 @@
                             <td>{{$company->id}}</td>
                             <td>{{$company->name}}</td>
                             <td>{{$company->email}}</td>
+                            <td>{{$company->website}}</td>
+                            @if(is_null($company->logo))
+                                <td>No Logo</td>
+                            @else
+                                <td><img style="display:block;" width="32px" height="32px" src="{{config('app.url') . '/storage/' .$company->logo}}" /></td>
+                            @endif
                             <td>
                                 <a href="{{ route('companies.show',$company->id)}}" class="btn btn-warning">Show</a>
                             </td>
@@ -51,7 +59,7 @@
                 <div>
                 </div>
             </div>
+                {{ $companies->links() }}
         </div>
-            {{ $companies->links() }}
     </div>
 @endsection

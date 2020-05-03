@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -39,12 +40,25 @@ class CompanyController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'email' => 'required|email|unique:companies,email'
+            'website'=>'nullable|url',
+            'email' => 'required|email|unique:companies,email',
+            'logo'=>'nullable|file|image|mimes:jpeg,png|max:2048|dimensions:min_width=100,min_height=100',
         ]);
+
+        $path = null;
+        if (!is_null($request->logo)){
+            $file = $request->file('logo');
+            $extension = $file->getClientOriginalExtension();
+            $path = 'images/'.auth()->id().'/companies/logo.'.$extension;
+
+            $file->storeAs('images/'.auth()->id(), 'companies/logo.'.$extension,'public');
+        }
 
         $company = new Company([
             'name' => $request->get('name'),
+            'website' => $request->get('website'),
             'email' => $request->get('email'),
+            'logo' => $path,
             'user_id' => auth()->id()
         ]);
         $company->save();
@@ -92,11 +106,28 @@ class CompanyController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'email' => 'required|email|unique:companies,email,'.$id
+            'website'=>'nullable|url',
+            'email' => 'required|email|unique:companies,email,'.$id,
+            'logo'=>'nullable|file|image|mimes:jpeg,png|max:2048|dimensions:min_width=100,min_height=100',
         ]);
 
         $company = Company::find($id);
+
+        $path = null;
+        if (!is_null($request->logo)){
+            if (Storage::disk('public')->exists($company->logo))
+                Storage::disk('public')->delete($company->logo);
+            $file = $request->file('logo');
+            $extension = $file->getClientOriginalExtension();
+            $path = 'images/'.auth()->id().'/companies/logo.'.$extension;
+
+            $file->storeAs('images/'.auth()->id(), 'companies/logo.'.$extension,'public');
+            $company->logo = $path;
+        }
+
+
         $company->name =  $request->get('name');
+        $company->website =  $request->get('website');
         $company->email = $request->get('email');
 
         $company->update();
@@ -117,4 +148,20 @@ class CompanyController extends Controller
 
         return redirect('/companies')->with('message', 'Company has been deleted successfully');
     }
+
+    public function uploadAvatar(Request $request)
+    {
+
+        $this->validate($request, [
+            'image'=>'required|file|image|mimes:jpeg,png|max:2048',
+        ]);
+
+        $file = $request->file('image');
+        $extension = $file->getClientOriginalExtension();
+        $path = 'images/'.auth()->id().'/companies/avatar'.$extension;
+
+        $file->storeAs('images/'.auth()->id(), 'companies/avatar.'.$extension,'public');
+
+    }
+
 }

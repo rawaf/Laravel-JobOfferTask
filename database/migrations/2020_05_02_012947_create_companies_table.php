@@ -20,6 +20,7 @@ class CreateCompaniesTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('name');
+            $table->string('website');
             $table->string('email')->unique();
             $table->string('logo')->nullable();
             $table->timestamps();

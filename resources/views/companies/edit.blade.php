@@ -15,7 +15,7 @@
                             </ul>
                         </div><br />
                     @endif
-                        <form method="post" action="{{ route('companies.update', $company->id) }}">
+                        <form method="post" action="{{ route('companies.update', $company->id) }}" enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
                             <div class="form-group">
@@ -27,6 +27,16 @@
                             <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="text" class="form-control" name="email" value={{ $company->email }} />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="website">Website:</label>
+                                <input type="text" class="form-control" name="website" value={{ $company->website }}/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="logo">Logo:</label>
+                                <input type="file" class="form-control" name="logo"/>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Update</button>

@@ -15,7 +15,7 @@
                         </ul>
                     </div><br />
                 @endif
-                <form method="post" action="{{ route('companies.store') }}">
+                <form method="post" action="{{ route('companies.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="name">Name:</label>
@@ -26,6 +26,17 @@
                         <label for="email">Email:</label>
                         <input type="text" class="form-control" name="email"/>
                     </div>
+
+                    <div class="form-group">
+                        <label for="website">Website:</label>
+                        <input type="text" class="form-control" name="website"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo">Logo:</label>
+                        <input type="file" class="form-control" name="logo"/>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>

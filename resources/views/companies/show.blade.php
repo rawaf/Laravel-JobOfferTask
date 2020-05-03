@@ -11,6 +11,8 @@
                         <td>ID</td>
                         <td>Name</td>
                         <td>Email</td>
+                        <td>Website</td>
+                        <td>Logo</td>
                         <td colspan = 2>Actions</td>
                     </tr>
                     </thead>
@@ -19,6 +21,12 @@
                             <td>{{$company->id}}</td>
                             <td>{{$company->name}}</td>
                             <td>{{$company->email}}</td>
+                            <td>{{$company->website}}</td>
+                            @if(is_null($company->logo))
+                                <td>No Logo</td>
+                            @else
+                                <td><img style="display:block;" width="32px" height="32px" src="{{config('app.url') . '/storage/' .$company->logo}}" /></td>
+                            @endif
                             <td>
                                 <a href="{{ route('companies.edit',$company->id)}}" class="btn btn-primary">Edit</a>
                             </td>
